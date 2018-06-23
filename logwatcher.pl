@@ -62,7 +62,7 @@ sub main
 		case '--help' {HELP ();}
 		else
 		{
-			print "\nUsage: tail.pl switch:[-tail|-count] file_name\n";
+			print "\nUsage: tail.pl switch:[-tail|-count|-grep] file_name\n";
 		}
 	}
 }
@@ -102,9 +102,9 @@ sub GREP
 }
 sub HELP
 {
-	print ("\t -tail \t\t Usage: tail.pl -tail file_name.log");
-	print ("\t -count \t\t Usage: tail.pl -count file_name.log");
-	print ("\t -grep \t\t Usage: tail.pl -grep error file_name.log");
+	print ("\t -tail          Usage: tail.pl -tail file_name.log\n");
+	print ("\t -count         Usage: tail.pl -count file_name.log\n");
+	print ("\t -grep          Usage: tail.pl -grep error file_name.log\n");
 }
 sub error
 {
