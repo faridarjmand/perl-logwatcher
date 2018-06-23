@@ -4,8 +4,8 @@
 use strict;
 use warnings;
 use File::Tail;
+use IO::File;
 use Switch;
-#use IO::File;
 #use Term::ANSIColor;
 
 ##########################################################
@@ -71,7 +71,8 @@ sub count
 	my $FILENAME = shift;
 	my $COUNTFILE = IO::File->new( $FILENAME, "r"  ) or error("can't open $FILENAME ($!)\n");
 	my $COUNT = 0;
-	$COUNT++ while( $COUNTFILE->getline );
+	$COUNT++
+	while( $COUNTFILE->getline );
 	print("There are $green$COUNT$nc lines in $yelloo$FILENAME$nc\n\n");
 	return $COUNT;
 }
