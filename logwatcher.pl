@@ -2,11 +2,11 @@
 ################# Created By.Farid Arjmand ################
 
 use strict;
-#use warnings;
-use IO::File;
+use warnings;
 use File::Tail;
-#use Term::ANSIColor;
 use Switch;
+#use IO::File;
+#use Term::ANSIColor;
 
 ##########################################################
 ################### Color modifiers ######################
