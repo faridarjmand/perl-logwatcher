@@ -38,14 +38,32 @@ main(@ARGV);
 sub main
 {
 	my $Switch = $ARGV[0];
-	my $FILENAME = $ARGV[1];
 	print("Your Switch is : [ $yelloo$Switch$nc ] \n\n");
-	error("missing filename") unless $FILENAME;
 	switch ($Switch)
 	{
-		case '-tail' {tail ($FILENAME);}
-		case '-count' {count ($FILENAME);}
-		else {print "\nUsage: tail.pl switch:[-tail|-count] file_name\n";}
+		case '-tail'
+		{
+			my $FILENAME = $ARGV[1];
+			error("missing filename") unless $FILENAME;
+			tail ($FILENAME);
+		}
+		case '-count'
+		{
+			my $FILENAME = $ARGV[1];
+			error("missing filename") unless $FILENAME;
+			count ($FILENAME);
+		}
+		case '-grep'
+		{
+			my $FILENAME = $ARGV[2];
+			error("missing filename") unless $FILENAME;
+			GREP ($FILENAME);
+		}
+		case '--help' {HELP ();}
+		else
+		{
+			print "\nUsage: tail.pl switch:[-tail|-count] file_name\n";
+		}
 	}
 }
 sub count
@@ -53,19 +71,40 @@ sub count
 	my $FILENAME = shift;
 	my $COUNTFILE = IO::File->new( $FILENAME, "r"  ) or error("can't open $FILENAME ($!)\n");
 	my $COUNT = 0;
-	$COUNT++ while( $COUNTFILE->getline  );
+	$COUNT++ while( $COUNTFILE->getline );
 	print("There are $green$COUNT$nc lines in $yelloo$FILENAME$nc\n\n");
 	return $COUNT;
 }
 sub tail
 {
 	my $FILENAME = shift;
-	my $TAILFILE = File::Tail->new( $FILENAME  ) or error("can't open $FILENAME ($!)\n");
+	my $TAILFILE = File::Tail->new( $FILENAME ) or error("can't open $FILENAME ($!)\n");
 	while (defined(my $LINEFILE=$TAILFILE->read))
 	{
 		if($LINEFILE=~m/error/){$LINEFILE=~s/error/$red error $nc/gi;}
-		print "$LINEFILE";
+		print ("$LINEFILE");
 	}
+}
+sub GREP
+{
+	my $FILENAME = shift;
+	my $TAILFILE = File::Tail->new( $FILENAME ) or error("can't open $FILENAME ($!)\n");
+	while (defined(my $LINEFILE=$TAILFILE->read))
+	{
+		my $ERROR = $ARGV[1];
+		if($LINEFILE=~m/$ERROR/)
+		{
+			$LINEFILE=~s/$ERROR/$RED$ERROR$nc/gi;
+			print ("$LINEFILE");
+		}
+	}
+
+}
+sub HELP
+{
+	print ("\t -tail \t\t Usage: tail.pl -tail file_name.log");
+	print ("\t -count \t\t Usage: tail.pl -count file_name.log");
+	print ("\t -grep \t\t Usage: tail.pl -grep error file_name.log");
 }
 sub error
 {
