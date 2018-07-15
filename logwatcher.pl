@@ -8,6 +8,8 @@ use IO::File;
 use Switch;
 #use Term::ANSIColor;
 
+################### Error List ######################
+my @list = ('error', 'NullPointerException', 'OutOfMemoryError', 'PermGen', 'exception', 'unreachable', 'STDERR', 'route', 'refuse', 'Warning', 'reset', 'unauthorized');
 ##########################################################
 ################### Color modifiers ######################
 ##########################################################
@@ -82,7 +84,10 @@ sub tail
 	my $TAILFILE = File::Tail->new( $FILENAME ) or error("can't open $FILENAME ($!)\n");
 	while (defined(my $LINEFILE=$TAILFILE->read))
 	{
-		if($LINEFILE=~m/error/){$LINEFILE=~s/error/$red error $nc/gi;}
+		for my $error (@list)
+		{
+			if($LINEFILE=~s/$error/$red $& $nc/gi);
+		}
 		print ("$LINEFILE");
 	}
 }
